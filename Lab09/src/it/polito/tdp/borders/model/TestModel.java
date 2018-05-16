@@ -11,16 +11,19 @@ public class TestModel {
 
 		System.out.println("TestModel -- TODO");
 		
-		System.out.println("Creo il grafo relativo al 2000");
+//		System.out.println("Creo il grafo relativo al 2000");
 		List<String> lista = model.bordersForYear(2000);
 		
-		Collection<Country> countries = model.getCountries();
-		System.out.format("Trovate %d nazioni\n", countries.size());
+		List<Country> countries = model.getCountries();
+//		System.out.format("Trovate %d nazioni\n", countries.size());
+//		
+//		for(String s : lista)
+//			System.out.println(s);
 		
-		for(String s : lista)
-			System.out.println(s);
+//		System.out.println("Il numero di componenti connesse è: " + model.numberOfConnectedSets());
 		
-		System.out.println("Il numero di componenti connesse è: " + model.numberOfConnectedSets());
+		for(Country c : model.getVicini(countries.get(53)))
+			System.out.println(c);
 
 //		System.out.format("Numero componenti connesse: %d\n", model.getNumberOfConnectedComponents());
 		

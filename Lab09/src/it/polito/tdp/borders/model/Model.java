@@ -6,6 +6,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 import it.polito.tdp.borders.db.BordersDAO;
 
@@ -30,9 +31,11 @@ public class Model {
 	}
 	
 	public List<String> bordersForYear(int anno) {
+		Country first;
+		Country second;
 		for(Border b : dao.getCountryPairs(anno)) {
-			Country first = this.mapCountries.get(b.getFirstCountryCode());
-			Country second = this.mapCountries.get(b.getSecondCountryCode());
+			first = this.mapCountries.get(b.getFirstCountryCode());
+			second = this.mapCountries.get(b.getSecondCountryCode());
 			this.graph.addEdge(first, second);
 		}
 		List<String> result = new ArrayList<>();
@@ -42,13 +45,23 @@ public class Model {
 		return result;
 	}
 
-	public Collection<Country> getCountries() {
-		return this.mapCountries.values();
+	public List<Country> getCountries() {
+		List<Country> result = new ArrayList<>(this.mapCountries.values());
+		Collections.sort(result);
+		return result;
 	}
 	
 	public int numberOfConnectedSets() {
 		ConnectivityInspector<Country,DefaultEdge> c = new ConnectivityInspector<>(this.graph);
 		return c.connectedSets().size();
+	}
+	
+	public List<Country> getVicini(Country inizio){
+		DepthFirstIterator<Country,DefaultEdge> DPI = new DepthFirstIterator<>(this.graph,inizio);
+		List<Country> result = new ArrayList<>();
+		while(DPI.hasNext())
+			result.add(DPI.next());
+		return result;
 	}
 	
 
